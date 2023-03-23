@@ -36,3 +36,8 @@ def make_model(kernel_size: int = 3, pool_size: int = 2, pooling: str = "max", d
     model.add(Dense(128, activation="relu"))
     model.add(Dense(10, activation="softmax"))
     return model
+
+if __name__ == "__main__":
+    model = make_model()
+    model.summary()
+

@@ -2,7 +2,7 @@ from tensorflow.keras.callbacks import LearningRateScheduler, TensorBoard
 from tensorflow.keras.optimizers import Adam
 
 from data_processing import load_data
-from models import model_baseline
+from models import make_model
 
 if __name__ == "__main__":
     X_train, y_train, X_val, y_val, X_test, y_test = load_data()
@@ -12,7 +12,7 @@ if __name__ == "__main__":
     batch_size = 64
     epochs = 10
     learning_rate = 0.01
-    model = model_baseline()
+    model = make_model()
 
     # Tensorboard callback
     tensorboard_callback = TensorBoard(log_dir="./logs")

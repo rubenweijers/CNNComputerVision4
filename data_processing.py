@@ -13,6 +13,11 @@ def load_data(test_size=0.2, random_state=42):
     X_val = X_val / 255
     X_test = X_test / 255
 
+    # Reshape the data to fit the data augmentation
+    X_train = X_train.reshape(-1, 28, 28, 1)
+    X_val = X_val.reshape(-1, 28, 28, 1)
+    X_test = X_test.reshape(-1, 28, 28, 1)
+
     # Add data augmentation
     datagen = ImageDataGenerator(
         rotation_range=10,

@@ -37,7 +37,19 @@ def make_model(kernel_size: int = 3, pool_size: int = 2, pooling: str = "max", d
     model.add(Dense(10, activation="softmax"))
     return model
 
+
+class DecayingLRSchedule(tf.keras.optimizers.schedules.LearningRateSchedule):
+    def __init__(self, lr, batch_size, total_size) -> None:
+        super().__init__()
+        self.lr = lr
+        self.n_steps = total_size // batch_size  # Number of steps per epoch, e.g. number of batches per epoch
+
+    def __call__(self, step):
+        """Decrease the learning rate at a 1/2 of the value every 5 epochs"""
+        epoch = step / self.n_steps  # Current epoch, e.g. epoch 3 or epoch 3.5
+        return self.lr * tf.math.pow(0.5, tf.math.floor(epoch / 5))
+
+
 if __name__ == "__main__":
     model = make_model()
     model.summary()
-

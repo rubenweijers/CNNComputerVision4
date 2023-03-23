@@ -1,8 +1,8 @@
-from tensorflow.keras.callbacks import LearningRateScheduler, TensorBoard
+from tensorflow.keras.callbacks import TensorBoard
 from tensorflow.keras.optimizers import Adam
 
 from data_processing import load_data
-from models import make_model
+from models import DecayingLRSchedule, make_model
 
 if __name__ == "__main__":
     X_train, y_train, X_val, y_val, X_test, y_test = load_data()
@@ -12,13 +12,12 @@ if __name__ == "__main__":
     batch_size = 64
     epochs = 10
     learning_rate = 0.01
-    model = make_model()
 
-    # Tensorboard callback
-    tensorboard_callback = TensorBoard(log_dir="./logs")
+    model = make_model(kernel_size=3, pool_size=2, pooling="max", dropout_value=None, conv_act="relu")  # Baseline model params
+    tensorboard_callback = TensorBoard(log_dir="./logs")  # Tensorboard callback
 
     # Decrease the learning rate at a 1/2 of the value every 5 epochs
-    learning_rate_schedule = LearningRateScheduler(lambda epoch: learning_rate * 0.5 ** (epoch // 5))
+    learning_rate_schedule = DecayingLRSchedule(learning_rate, batch_size=batch_size, total_size=X_train.shape[0])
     opt = Adam(learning_rate=learning_rate_schedule)
 
     model.compile(optimizer=opt, loss="categorical_crossentropy", metrics=["accuracy"])

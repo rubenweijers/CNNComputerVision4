@@ -9,23 +9,39 @@ if __name__ == "__main__":
 
     kernel_size = 3
     pool_size = 2
-    pooling = "max"
+    pooling_type = "max"
     dropout_value = None
     conv_act = "relu"
     learning_rate = 0.01
     batch_size = 64
     total_size = X_train.shape[0]
-    epochs = 1
+    epochs = 15
+
+    model_variation = "baseline"  # Choose from: {baseline, nike, collegedropout, gigakernel, averagejoe}
+
+    if model_variation == "baseline":
+        pass  # Default values are already set
+    elif model_variation == "nike":
+        conv_act = "swish"
+    elif model_variation == "collegedropout":
+        dropout_value = 0.5
+    elif model_variation == "gigakernel":
+        kernel_size = 5  # TODO: three layers of 5x5 too big for 28x28 images
+    elif model_variation == "averagejoe":
+        pooling_type = "avg"
+    else:
+        raise ValueError(f"Invalid model variation: {model_variation}")
 
     # Create the model
-    model = make_model(kernel_size=kernel_size, pool_size=pool_size, pooling=pooling, dropout_value=dropout_value, conv_act=conv_act)
+    model = make_model(kernel_size=kernel_size, pool_size=pool_size, pooling_type=pooling_type,
+                       dropout_value=dropout_value, conv_act=conv_act)
 
     # Prepare the model
     model = prepare_model(model, learning_rate=learning_rate, batch_size=batch_size, total_size=total_size)
 
-    tensorboard_callback = TensorBoard(log_dir="./logs")  # Tensorboard callback
+    tensorboard_callback = TensorBoard(log_dir=f"./logs/{model_variation}")
     model.fit(X_train, y_train, epochs=epochs, validation_data=(X_val, y_val), batch_size=batch_size, callbacks=[tensorboard_callback])
-    model.save("./models/model_baseline.h5")
+    model.save(f"./models/model_{model_variation}.h5")
 
     # Evaluate the model
     loss, accuracy = model.evaluate(X_test, y_test)

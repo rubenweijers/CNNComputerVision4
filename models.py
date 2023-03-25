@@ -5,12 +5,12 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 
 
-def make_model(kernel_size: int = 3, pool_size: int = 2, pooling: str = "max", dropout_value: float = None, conv_act: str = "relu"):
+def make_model(kernel_size: int = 3, pool_size: int = 2, pooling_type: str = "max", dropout_value: float = None, conv_act: str = "relu"):
     """The model used for the experiments."""
 
-    if pooling == "max":
+    if pooling_type == "max":
         pooling = MaxPooling2D
-    elif pooling == "avg":
+    elif pooling_type == "avg":
         pooling = AveragePooling2D
     else:
         raise ValueError("Pooling must be either 'max' or 'average'.")

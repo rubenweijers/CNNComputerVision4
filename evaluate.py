@@ -39,10 +39,12 @@ def plot_learning_rate_schedule(epochs: 15, learning_rate: 0.001, batch_size: in
 
 
 if __name__ == "__main__":
-    X_train, y_train, X_val, y_val, X_test, y_test = load_data()
-
     # Evaluate the model
-    model = load_model("./models/model_baseline.h5", custom_objects={"DecayingLRSchedule": DecayingLRSchedule})
+    model_variation = "baseline"  # Choose from: {baseline, nike, collegedropout, gigakernel, averagejoe}
+    model = load_model(f"./models/model_{model_variation}.h5", custom_objects={"DecayingLRSchedule": DecayingLRSchedule})
+
+    # Load the data
+    X_train, y_train, X_val, y_val, X_test, y_test = load_data()
     y_pred = model.predict(X_test)
 
     y_pred = np.argmax(y_pred, axis=1)  # Predictions

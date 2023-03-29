@@ -1,11 +1,13 @@
 import tensorflow as tf
-from tensorflow.keras.layers import (AveragePooling2D, Conv2D, Dense, Dropout,
-                                     Flatten, MaxPooling2D)
+from tensorflow.keras.layers import (AveragePooling2D, BatchNormalization,
+                                     Conv2D, Dense, Dropout, Flatten,
+                                     MaxPooling2D)
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 
 
-def make_model(kernel_size: int = 3, pool_size: int = 2, pooling_type: str = "max", dropout_value: float = None, conv_act: str = "relu"):
+def make_model(kernel_size: int = 3, pool_size: int = 2, pooling_type: str = "max",
+               dropout_value: float = None, conv_act: str = "relu", normalise: bool = False):
     """The model used for the experiments."""
 
     if pooling_type == "max":
@@ -24,10 +26,22 @@ def make_model(kernel_size: int = 3, pool_size: int = 2, pooling_type: str = "ma
 
     model = Sequential()
     model.add(Conv2D(64, kernel_size, activation=conv_act, input_shape=(28, 28, 1)))
+
+    if normalise:
+        model.add(BatchNormalization())
+
     model.add(pooling(pool_size))
     model.add(Conv2D(32, kernel_size, activation=conv_act))
+
+    if normalise:
+        model.add(BatchNormalization())
+
     model.add(pooling(pool_size))
     model.add(Conv2D(16, kernel_size, activation=conv_act))
+
+    if normalise:
+        model.add(BatchNormalization())
+
     model.add(pooling(pool_size))
     model.add(Flatten())
 

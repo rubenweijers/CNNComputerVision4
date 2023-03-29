@@ -14,12 +14,14 @@ if __name__ == "__main__":
     pooling_type = "max"
     dropout_value = None
     conv_act = "relu"
+    normalise = False
+
     learning_rate = 0.01
     batch_size = 64
     total_size = X_train.shape[0]
     epochs = 15
 
-    model_variation = "baseline"  # Choose from: {baseline, nike, collegedropout, gigakernel, averagejoe}
+    model_variation = "baseline"  # Choose from: {baseline, nike, collegedropout, normaliser2000, averagejoe}
 
     if model_variation == "baseline":
         pass  # Default values are already set
@@ -27,8 +29,8 @@ if __name__ == "__main__":
         conv_act = "swish"
     elif model_variation == "collegedropout":
         dropout_value = 0.5
-    elif model_variation == "gigakernel":
-        kernel_size = 5  # TODO: three layers of 5x5 too big for 28x28 images
+    elif model_variation == "normaliser2000":
+        normalise = True
     elif model_variation == "averagejoe":
         pooling_type = "avg"
     else:

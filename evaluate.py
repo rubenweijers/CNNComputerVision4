@@ -76,7 +76,7 @@ def plot_history(history: dict, variation: str) -> None:
 
 if __name__ == "__main__":
     # Evaluate the model
-    model_variation = "baseline"  # Choose from: {baseline, nike, collegedropout, gigakernel, averagejoe}
+    model_variation = "baseline"  # Choose from: {baseline, nike, collegedropout, normaliser2000, averagejoe}
     model = load_model(f"./models/model_{model_variation}.h5", custom_objects={"DecayingLRSchedule": DecayingLRSchedule})
 
     # Load the history

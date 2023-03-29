@@ -1,3 +1,5 @@
+import pickle
+
 from tensorflow.keras.callbacks import TensorBoard
 
 from data_processing import load_data
@@ -40,8 +42,13 @@ if __name__ == "__main__":
     model = prepare_model(model, learning_rate=learning_rate, batch_size=batch_size, total_size=total_size)
 
     tensorboard_callback = TensorBoard(log_dir=f"./logs/{model_variation}")
-    model.fit(X_train, y_train, epochs=epochs, validation_data=(X_val, y_val), batch_size=batch_size, callbacks=[tensorboard_callback])
+    history = model.fit(X_train, y_train, epochs=epochs, validation_data=(
+        X_val, y_val), batch_size=batch_size, callbacks=[tensorboard_callback])
     model.save(f"./models/model_{model_variation}.h5")
+
+    # Save the history
+    with open(f"./history/history_{model_variation}.pkl", "wb") as f:
+        pickle.dump(history.history, f)
 
     # Evaluate the model
     loss, accuracy = model.evaluate(X_test, y_test)
